@@ -67,5 +67,9 @@ Follow the prompts to deploy.
 - Deploy the backend
 License
 This project is open-source. Feel free to use, modify, and contribute!
+
+Here is what it all looks like: https://task-manager-frontend-two-rosy.vercel.app/
+
 Author
 Developed by Dennis Stephen Muhia Njoroge
+
