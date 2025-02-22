@@ -3,10 +3,13 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { motion, AnimatePresence } from "framer-motion";
 import { Trash2, ChevronRight, Search, Sun, Moon } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 function App() {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
+  const [newDescription, setNewDescription] = useState("");
+const [newDueDate, setNewDueDate] = useState("");
   const [filter, setFilter] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
@@ -37,16 +40,20 @@ function App() {
   };
 
   const addTask = () => {
-    if (newTask.trim() === "") return;
+    if (newTask.trim() === "" || newDescription.trim() === "") return;
 
     const newTaskObj = {
       id: Date.now().toString(),
       title: newTask,
+      description: newDescription,
+      dueDate: newDueDate,
       status: "Pending",
     };
 
     setTasks([...tasks, newTaskObj]);
     setNewTask("");
+    setNewDescription("");
+    setNewDueDate("");
 
     toast.success("Task added successfully!");
   };
@@ -98,7 +105,8 @@ function App() {
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3 }}
-        className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 w-full max-w-lg sm:max-w-2xl transition-colors"
+        className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 w-full max-w-3xl transition-colors"
+
       >
         <Toaster position="top-right" reverseOrder={false} />
 
@@ -136,6 +144,20 @@ function App() {
             value={newTask}
             onChange={(e) => setNewTask(e.target.value)}
           />
+          <input
+  type="text"
+  className="flex-1 p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:text-white"
+  placeholder="Enter a description..."
+  value={newDescription}
+  onChange={(e) => setNewDescription(e.target.value)}
+/>
+<input
+  type="date"
+  className="flex-1 p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:text-white"
+  value={newDueDate}
+  onChange={(e) => setNewDueDate(e.target.value)}
+/>
+
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -185,6 +207,9 @@ function App() {
                           >
                             <span className="text-lg dark:text-white">{task.title}</span>
                             <div className="flex items-center gap-2">
+                            <Link to={`/edit/${task.id}`} className="text-blue-500 hover:underline">
+            Edit
+          </Link>
                               <motion.button
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
